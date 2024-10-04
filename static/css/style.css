@@ -1,0 +1,43 @@
+#wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+#sidebar-wrapper {
+    min-width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    padding: 20px;
+}
+
+/* Custom card styles */
+.card {
+    border-radius: 10px;
+}
+
+.card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    font-size: 1.2rem;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+/* List group item styling */
+.list-group-item {
+    border: none;
+    padding: 15px 10px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}

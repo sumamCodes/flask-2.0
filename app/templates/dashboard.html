@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="d-flex" id="wrapper">
+        <div class="bg-dark text-white" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 fs-4 fw-bold">Project Dashboard</div>
+            <div class="list-group list-group-flush my-3">
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-light">Dashboard</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-light">Reports</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-light">Settings</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-light">Logout</a>
+            </div>
+        </div>
+        
+        <!-- Page Content -->
+        <div id="page-content-wrapper" class="p-4">
+            <div class="container-fluid">
+                <h1 class="mt-4">Dashboard</h1>
+                
+                <!-- Cards Row -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Users</h5>
+                                <p class="card-text">23,423</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Revenue</h5>
+                                <p class="card-text">$23.3m</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-white bg-danger mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Active Issues</h5>
+                                <p class="card-text">4,533.5</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Line Graph Row -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Sales Trend (Last 6 Months)</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="lineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pie Chart and Customer Orders Row -->
+                <div class="row mb-4">
+                    <!-- Pie Chart -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Product Category Distribution</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="pieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Customer Orders -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Customer Orders</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer Name</th>
+                                            <th>Order Value</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Elizabeth Lee</td>
+                                            <td>$553</td>
+                                            <td><span class="badge bg-success">New</span></td>
+                                            <td><button class="btn btn-primary btn-sm">Edit</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Carlos Garcia</td>
+                                            <td>$747</td>
+                                            <td><span class="badge bg-warning">In Progress</span></td>
+                                            <td><button class="btn btn-primary btn-sm">Edit</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ryan Young</td>
+                                            <td>$769</td>
+                                            <td><span class="badge bg-danger">Completed</span></td>
+                                            <td><button class="btn btn-primary btn-sm">Edit</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Single Column List View -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title">Recent Activities</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">Activity 1: New customer added</li>
+                                    <li class="list-group-item">Activity 2: Order #1456 completed</li>
+                                    <li class="list-group-item">Activity 3: New report generated</li>
+                                    <li class="list-group-item">Activity 4: Payment received for Order #154</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Line Graph and Pie Chart with Chart.js -->
+    <script>
+        // Line Graph
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        const lineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['March', 'April', 'May', 'June', 'July', 'August'],
+                datasets: [{
+                    label: 'Revenue (in $)',
+                    data: [12000, 15000, 10000, 18000, 20000, 22000],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Pie Chart
+        const ctxPie = document.getElementById('pieChart').getContext('2d');
+        const pieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Electronics', 'Furniture', 'Clothing', 'Books', 'Other'],
+                datasets: [{
+                    data: [25, 15, 30, 10, 20],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+</body>
+</html>
