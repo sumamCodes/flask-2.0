@@ -1,1 +1,1 @@
-This tis the dashboard created on Flask with front end on bootstrap.
+This is the dashboard created on Flask with front end on bootstrap.
